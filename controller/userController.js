@@ -78,11 +78,31 @@ const logout = async (req, res) => {
     res.redirect("/user/login")
 }
 
+
+const messages_post = async (req, res) => {
+    console.log(req.body)
+
+    await User.findOne(
+        { email: req.user.email}, async (err, user) => {
+            if (err) throw err;
+            if (user) {
+                user.messages.push(req.body.msg);
+                await user.save();
+                console.log("Added Successfully!");
+            }
+        }
+    );
+
+    res.redirect("/user")
+
+}
+
 module.exports = {
     index,
     register_get,
     register_post,
     login_get,
     login_post,
-    logout
+    logout,
+    messages_post
 }

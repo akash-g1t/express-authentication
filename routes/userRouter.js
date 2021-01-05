@@ -18,4 +18,6 @@ router.post("/login", userController.login_post);
 
 router.get("/logout", userController.logout);
 
+router.post("/addmsg", checkAuthenticated, userController.messages_post);
+
 module.exports = router;

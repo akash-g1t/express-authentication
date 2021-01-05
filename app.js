@@ -10,9 +10,10 @@ const passport = require("passport");
 const PORT = process.env.PORT || 5000;
 
 require('dotenv').config();
+
 // Connecting to database
 const DBURI = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.cpwfq.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`
-mongoose.connect(DBURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(DBURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(result => app.listen(PORT, () => console.log(`Server is listening to port ${PORT}`)))
     .catch(err => console.log(err))
 

@@ -9,5 +9,21 @@
 <p>Not Logged in</p>
 <% } %>
 
+<% if (typeof error != "undefined" && error !="") { %>
+    <h4><%= error %></h4>
+<% } %>
+
+<form action="/user/addmsg" method="POST">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Add Message</label>
+      <input required name="msg" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Message</button>
+</form>
+
+<h1>Your Messages:</h1>
+<% user.messages.forEach(message => { %>
+    <h3><%= message %></h3>
+<% }) %>
 
 <%- include("../partials/footer.ejs") %>
