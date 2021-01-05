@@ -14,6 +14,9 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    messages: [{
+        type: String,
+    }]
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);
