@@ -1,9 +1,14 @@
 <%- include("../partials/header.ejs") %>
 
 <h1>Login</h1>
-<% if(typeof err != "undefined") { %>
+<% if(success_message != "") { %>
+  <div class="alert alert-success" role="alert">
+    <%= success_message %>
+  </div>
+<% } %>
+<% if(typeof error != "undefined" && error != "") { %>
   <div class="alert alert-danger" role="alert">
-    <%= err %>
+    <%= error %>
   </div>
 <% } %>
 <form action="/user/login" method="POST">

@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 
 const PORT = process.env.PORT || 5000;
 
@@ -32,7 +33,26 @@ app.use(session({
     saveUninitialized: true
 }))
 
+app.use(flash());
+
 //custom Middlewares
+app.use((req, res, next) => {
+    res.locals.success_message = req.flash("success_message");
+    res.locals.error_message = req.flash("error_message");
+    res.locals.error = req.flash("error");
+    // res.locals.req = req;
+    // res.locals.res = res;
+    next();
+})
+
+const checkAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        res.set("Cache-Control", "no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0");
+        return next();
+    } else {
+        res.redirect("/user/login")
+    }
+}
 // app.use( async (req, res, next) => {
 //     console.log("New Request Made");
 //     console.log(`host: ${req.hostname}`);

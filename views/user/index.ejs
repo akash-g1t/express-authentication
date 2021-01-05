@@ -1,5 +1,13 @@
 <%- include("../partials/header.ejs") %>
 
 <h1>You are logged in!</h1>
+<% if (typeof user != "undefined") { %>
+<p>ID: <%= user.id %></p>
+<p>Fullname: <%= user.fullname %></p>
+<p>Email: <%= user.email %></p>
+<% } else { %>
+<p>Not Logged in</p>
+<% } %>
+
 
 <%- include("../partials/footer.ejs") %>

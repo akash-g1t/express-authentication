@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const passport = require("./passportStrategy");
 
 const index = async (req, res) => {
-    res.render("user/index");
+    res.render("user/index", { user: req.user });
 };
 
 const register_get = async (req, res) => {
@@ -13,24 +13,24 @@ const register_get = async (req, res) => {
 
 const register_post = async (req, res) => {
     let { fullname, email, password, password1} = req.body;
-    let err;
+    let error;
     if (!fullname || !email || !password || !password1) {
-        err = "All Fields are mendatory!";
-        res.render("user/register", { err });
+        error = "All Fields are mendatory!";
+        res.render("user/register", { error });
     }
 
     if (password != password1) {
-        err = "Passwords Should Match";
-        res.render("user/register", { err, fullname, email });
+        error = "Passwords Should Match";
+        res.render("user/register", { error, fullname, email });
     }
 
-    if (typeof err == "undefined") {
+    if (typeof error == "undefined") {
         User.findOne({email: email}, async (err, data)=> {
             if(err) throw err;
             if (data) {
                 console.log("user Already Exist!");
-                err = "User Already Exists";
-                res.render("user/register", { err, fullname, email });
+                error = "User Already Exists";
+                res.render("user/register", { error, fullname, email });
             } else {
                 await bcrypt.genSalt(10, async (err, salt) => {
                     if (err) throw err;
@@ -43,11 +43,12 @@ const register_post = async (req, res) => {
                                 email,
                                 password
                             }).save();
+                            req.flash("success_message", "You can Login Now!");
                             res.redirect("/user/login");
                             
                         } catch (error) {
-                            err = "SOmething went wrong, Please try again!";
-                            res.render("user/register", { err, fullname, email });
+                            error = "SOmething went wrong, Please try again!";
+                            res.render("user/register", { error, fullname, email });
                         }
                     })
                 });
@@ -65,14 +66,22 @@ const login_get = async (req, res) => {
 const login_post = async (req, res, next) => {
     passport.authenticate("local", {
         failureRedirect: "/user/login",
-        successRedirect: "/user"
+        successRedirect: "/user",
+        failureFlash: true
     })(req, res, next);
 };
+
+
+const logout = async (req, res) => {
+    req.logout();
+    res.redirect("/user/login")
+}
 
 module.exports = {
     index,
     register_get,
     register_post,
     login_get,
-    login_post
+    login_post,
+    logout
 }

@@ -9,13 +9,12 @@ passport.use(new localStrategy({ usernameField: "email" }, async (email, passwor
     await User.findOne({email: email}, async (err, data) => {
         if (err) throw err;
         if (!data) {
-            console.log("no user found")
-            return done(null, false);
+            return done(null, false, { message: "User doesn't exist!"});
         }
         const match = await bcrypt.compare(password, data.password)
         console.log(match);
         if (!match) {
-            return done(null, false);
+            return done(null, false, { message: "Check Your Creadentials and try again!"});
         }
         if (match) {
             return done(null, data)
