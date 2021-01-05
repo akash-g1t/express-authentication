@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,6 +24,13 @@ app.use(express.static("public"));
 app.use(morgan("dev"));
 
 app.use(express.urlencoded({extended: true}))
+app.use(cookieParser("secret"));
+app.use(session({
+    secret: "thisisasecret",
+    maxAge: 36000000,
+    resave: true,
+    saveUninitialized: true
+}))
 
 //custom Middlewares
 // app.use( async (req, res, next) => {

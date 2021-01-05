@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
+const passport = require("./passportStrategy");
+
 const index = async (req, res) => {
     res.render("user/index");
 };
@@ -60,8 +62,11 @@ const login_get = async (req, res) => {
 };
 
 
-const login_post = async (req, res) => {
-    res.render("user/login");
+const login_post = async (req, res, next) => {
+    passport.authenticate("local", {
+        failureRedirect: "/user/login",
+        successRedirect: "/user"
+    })(req, res, next);
 };
 
 module.exports = {
