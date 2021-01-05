@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
+const passport = require("passport");
 
 const PORT = process.env.PORT || 5000;
 
@@ -32,6 +33,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(flash());
 

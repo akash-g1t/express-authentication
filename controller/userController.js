@@ -1,7 +1,8 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 
-const passport = require("./passportStrategy");
+require("./passportStrategy")(passport);
 
 const index = async (req, res) => {
     res.render("user/index", { user: req.user });
